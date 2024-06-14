@@ -54,11 +54,11 @@ model Todo {
 
 ```
 
-- 5. Generate the Prisma Client
-- - bunx prisma generate
-
-- 6. Modify .env
+- 5. Modify .env
 
 ```js
-DATABASE_URL = 'mongodb+srv://<username>:<password>@cluster0.ugofsmz.mongodb.net/<databasename>';
+DATABASE_URL = 'mongodb+srv://<username>:<password>@cluster0.ugofsmz.mongodb.net/<DatabaseName>';
 ```
+
+- 6. Generate the Prisma Client
+- - bunx prisma generate
