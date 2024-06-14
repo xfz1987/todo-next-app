@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Nextjs14 + Prisma + MongoDB
 
-## Getting Started
+## Create a nextjs app
 
-First, run the development server:
+- bun create-next-app@latest
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Use prisma to connect mongoDB
+
+- 1. bun add prisma -D
+- 2. bun add @prisma/client
+- 3. bunx prisma init
+- 4. Edit the schema.prisma and re-define schema model
+
+```javascript
+// this is mongoose's schema
+const Schema = new mongoose.Schema(
+	{
+		title: {
+			type: String,
+			required: true,
+		},
+		description: {
+			type: String,
+			required: true,
+		},
+		isCompleted: {
+			type: Boolean,
+			default: false,
+		},
+	},
+	{
+		timestamps: true,
+	}
+);
+
+// We do not need the schema file above. let's edit the file named "prisma/schema.prisma"
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb" // here
+  url      = env("DATABASE_URL")
+}
+
+// Define the table model
+model Todo {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  isCompleted Boolean? @default(false)
+}
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- 5. Generate the Prisma Client
+- - bunx prisma generate
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- 6. Modify .env
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```js
+DATABASE_URL = 'mongodb+srv://<username>:<password>@cluster0.ugofsmz.mongodb.net/<databasename>';
+```
